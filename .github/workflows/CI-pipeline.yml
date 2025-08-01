@@ -1,11 +1,13 @@
 name: Build the app
 
-env:
-  RESOURCE-GROUP: DevOps-group
-  LOCATION: southeastasia
-  TEMPLATE-FILE: infra/webapp.bicep
-  SUBSCRIPTION-ID: 398eae33-1529-42af-950d-8feca8144acf
-  WEBAPP-NAME: eshoponweb-webapp-dang12394
+on: [push, workflow_dispatch]
+
+# env:
+#   RESOURCE-GROUP: DevOps-group
+#   LOCATION: southeastasia
+#   TEMPLATE-FILE: infra/webapp.bicep
+#   SUBSCRIPTION-ID: 398eae33-1529-42af-950d-8feca8144acf
+#   WEBAPP-NAME: eshoponweb-webapp-dang12394
 
 jobs:
   build:

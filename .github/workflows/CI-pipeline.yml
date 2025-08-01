@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: .net-app
-        path: ${{env.DOTNET_ROOT}}/app.zip
+        path: C:\tools\app.zip
 
     - name: Deploy zip file to IIS
       run: |

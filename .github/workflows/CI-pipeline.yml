@@ -21,6 +21,17 @@ jobs:
         dotnet-version: '8.0.x'
         dotnet-quality: 'preview'
 
+    - name: Remove Azure DevOps NuGet source
+      shell: powershell
+      run: |
+        dotnet nuget remove source eShopOnWebShared || echo "Source not found"
+        dotnet nuget remove source "Azure DevOps" || echo "Source not found"
+
+    - name: Ensure nuget.org is configured
+      shell: powershell
+      run: |
+        dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+        
     #Basic .NET step
     - name: Build with dotnet
       run: |

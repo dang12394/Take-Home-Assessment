@@ -20,6 +20,12 @@ jobs:
       with:
         dotnet-version: '8.0.x'
         dotnet-quality: 'preview'
+        install-dir: ./dotnet
+    
+    #Create dotnet cmd path
+    - name: Add dotnet to PATH
+      run: echo "${{ github.workspace }}/dotnet" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+
     #Basic .NET step
     - name: Build with dotnet
       run: dotnet build ./eShopOnWeb.sln --configuration Release

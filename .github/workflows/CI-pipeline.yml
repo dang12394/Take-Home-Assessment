@@ -1,0 +1,41 @@
+name: Build the app
+
+env:
+  RESOURCE-GROUP: DevOps-group
+  LOCATION: southeastasia
+  TEMPLATE-FILE: infra/webapp.bicep
+  SUBSCRIPTION-ID: 398eae33-1529-42af-950d-8feca8144acf
+  WEBAPP-NAME: eshoponweb-webapp-dang12394
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v4
+    #Install .NET on runner
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+        dotnet-quality: 'preview'
+    #Basic .NET step
+    - name: Build with dotnet
+      run: dotnet build ./eShopOnWeb.sln --configuration Release
+    - name: Test with dotnet
+      run: dotnet test ./eShopOnWeb.sln --configuration Release
+    #Publish app.zip package
+    - name: dotnet publish
+      run: |
+        dotnet publish ./src/Web/Web.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        cd ${{env.DOTNET_ROOT}}/myapp
+        zip -r ../app.zip .
+    #Upload app.zip to staging and wait to deploy
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v4
+      with:
+        name: .net-app
+        path: ${{env.DOTNET_ROOT}}/app.zip
+
+    - name: Deploy zip file to IIS
+      run: |
+        powershell -ExecutionPolicy Bypass -File ./Deploy-to-IIS.ps1
